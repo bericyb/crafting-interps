@@ -5,7 +5,7 @@ import "fmt"
 type AstPrinter struct{}
 
 func (AstP *AstPrinter) Print(expr Expr) string {
-	return expr.accept(AstP)
+	return expr.Accept(AstP)
 }
 
 type ExprVisitor interface {
@@ -16,7 +16,7 @@ type ExprVisitor interface {
 }
 
 type Expr interface {
-	accept(visitor ExprVisitor) string
+	Accept(visitor ExprVisitor) string
 }
 
 type Binary struct {
@@ -25,7 +25,7 @@ type Binary struct {
 	Right    Expr
 }
 
-func (B Binary) accept(visitor ExprVisitor) string {
+func (B Binary) Accept(visitor ExprVisitor) string {
 	return visitor.visitBinary(B)
 }
 
@@ -33,7 +33,7 @@ type Grouping struct {
 	Expression Expr
 }
 
-func (G Grouping) accept(visitor ExprVisitor) string {
+func (G Grouping) Accept(visitor ExprVisitor) string {
 	return visitor.visitGrouping(G)
 }
 
@@ -41,7 +41,7 @@ type Literal struct {
 	Value any
 }
 
-func (L Literal) accept(visitor ExprVisitor) string {
+func (L Literal) Accept(visitor ExprVisitor) string {
 	return visitor.visitLiteral(L)
 }
 
@@ -50,7 +50,7 @@ type Unary struct {
 	Right    Expr
 }
 
-func (U Unary) accept(visitor ExprVisitor) string {
+func (U Unary) Accept(visitor ExprVisitor) string {
 	return visitor.visitUnary(U)
 }
 
@@ -80,7 +80,7 @@ func (AstP *AstPrinter) parenthesize(name string, exprs ...Expr) string {
 
 	for _, expr := range exprs {
 		s = s + " "
-		s = s + expr.accept(AstP)
+		s = s + expr.Accept(AstP)
 
 	}
 

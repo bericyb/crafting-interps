@@ -50,9 +50,9 @@ func (p *Parser) equality() (Expr, error) {
 			return nil, err
 		}
 		expr = Binary{
-			left:     expr,
-			operator: operator,
-			right:    right,
+			Left:     expr,
+			Operator: operator,
+			Right:    right,
 		}
 
 	}
@@ -108,9 +108,9 @@ func (p *Parser) comparison() (Expr, error) {
 			return nil, err
 		}
 		expr = Binary{
-			left:     expr,
-			operator: operator,
-			right:    right,
+			Left:     expr,
+			Operator: operator,
+			Right:    right,
 		}
 	}
 
@@ -130,9 +130,9 @@ func (p *Parser) term() (Expr, error) {
 			return nil, err
 		}
 		expr = Binary{
-			left:     expr,
-			operator: operator,
-			right:    right,
+			Left:     expr,
+			Operator: operator,
+			Right:    right,
 		}
 	}
 
@@ -152,9 +152,9 @@ func (p *Parser) factor() (Expr, error) {
 			return nil, err
 		}
 		expr = Binary{
-			left:     expr,
-			operator: operator,
-			right:    right,
+			Left:     expr,
+			Operator: operator,
+			Right:    right,
 		}
 	}
 
@@ -169,8 +169,8 @@ func (p *Parser) unary() (Expr, error) {
 			return nil, err
 		}
 		return Unary{
-			operator: operator,
-			right:    right,
+			Operator: operator,
+			Right:    right,
 		}, nil
 	}
 
@@ -181,25 +181,25 @@ func (p *Parser) primary() (Expr, error) {
 
 	if p.match(FALSE) {
 		return Literal{
-			value: nil,
+			Value: nil,
 		}, nil
 	}
 
 	if p.match(TRUE) {
 		return Literal{
-			value: TRUE,
+			Value: TRUE,
 		}, nil
 	}
 
 	if p.match(NIL) {
 		return Literal{
-			value: NIL,
+			Value: NIL,
 		}, nil
 	}
 
 	if p.match(NUMBER, STRING) {
 		return Literal{
-			value: p.previous().Literal,
+			Value: p.previous().Literal,
 		}, nil
 	}
 
@@ -213,7 +213,7 @@ func (p *Parser) primary() (Expr, error) {
 			return nil, err
 		}
 		return Grouping{
-			expression: expr,
+			Expression: expr,
 		}, nil
 	}
 
@@ -247,4 +247,15 @@ func (p *Parser) error(token Token, message string) string {
 	} else {
 		return Report(token.Line, " at '"+token.Lexeme+"'", message)
 	}
+}
+
+func ErrorOut(line int, msg string) {
+	Report(line, "", msg)
+}
+
+func Report(line int, where, msg string) string {
+	error := fmt.Sprintf("[line %d] Error %s:%s", line, where, msg)
+	fmt.Println(error)
+
+	return error
 }

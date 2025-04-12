@@ -13,11 +13,6 @@ func main() {
 
 	fmt.Println("args: ", len(os.Args))
 
-	expr := utils.Binary{
-
-		utils.Unary{utils.Token{TokenType: utils.MINUS, "-", null, 1}}
-	}
-
 	if len(os.Args) > 2 {
 		fmt.Println("Usage: jlox [script]")
 		os.Exit(64)
@@ -63,14 +58,11 @@ func runPrompt() error {
 }
 
 func run(source string) error {
-	fmt.Println("in run")
 	scanner := utils.Scanner{
 		Source: source,
 	}
 
 	tokens := scanner.ScanTokens()
-
-	fmt.Println("Scanning this bitch")
 
 	for _, token := range tokens {
 		fmt.Println(token.ToString())
@@ -83,29 +75,13 @@ func run(source string) error {
 
 	expression, error := parser.Parse()
 	if error != nil {
-
-		fmt.Println("We got an error fuck!", error)
+		fmt.Println("We got an error, fuck!", error)
 		return error
 	}
 
-	fmt.Println("Parsing this bitch")
-
 	printer := utils.AstPrinter{}
-
-	fmt.Println("At least we got here? ")
 
 	fmt.Println(printer.Print(expression))
 
 	return nil
-}
-
-func ErrorOut(line int, msg string) {
-	Report(line, "", msg)
-}
-
-func Report(line int, where, msg string) string {
-	error := fmt.Sprintf("[line %d] Error %s:%s", line, where, msg)
-	fmt.Println(error)
-
-	return error
 }
